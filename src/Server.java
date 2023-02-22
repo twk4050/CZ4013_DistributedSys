@@ -23,15 +23,14 @@ public class Server {
             // waiting to receive packets
             this.socket.receive(packet); // blocking
             String messageFromClient = convertByteToStringBuilder(this.buffer).toString();
-            System.out.println("From Client: " + messageFromClient);
 
             // getting client's info
             int clientPort = packet.getPort();
             InetAddress clientAddress = packet.getAddress();
-            System.out.println("client address/port:" + clientAddress + "/" + clientPort);
+            System.out.println("From Client" + clientAddress + "/" + clientPort + ": " + messageFromClient);
 
             // crafting response back to client
-            String messageToClient = "Server: " + messageFromClient;
+            String messageToClient = messageFromClient; // simple echo server for now
             byte[] rBuffer = messageToClient.getBytes();
 
             DatagramPacket response = new DatagramPacket(rBuffer, rBuffer.length, clientAddress, clientPort);
@@ -47,8 +46,8 @@ public class Server {
         this.packet = new DatagramPacket(buffer, buffer.length);
     }
 
-    // A utility method to convert the byte array
-    // data into a string representation.
+    // TODO: shift this fn into Utilities.java
+    // A utility method to convert the byte array data into a string representation.
     public static StringBuilder convertByteToStringBuilder(byte[] a) {
         if (a == null)
             return null;
