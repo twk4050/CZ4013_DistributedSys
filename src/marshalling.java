@@ -11,7 +11,13 @@ public class marshalling {
     }
 
     public static String[] decodedString(String string){
-        
+        String[] tokens = string.split(":");
+        return tokens;
+    }
+
+    public static int msglength(byte[] bytes){
+        String str = bytetoString(bytes);
+        return str.length();
     }
 
 }
