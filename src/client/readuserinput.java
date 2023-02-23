@@ -44,6 +44,17 @@ public class readuserinput {
             return inputFloat();
         }
     }
+    public static double inputDouble(){
+        try{
+            double number = input.nextDouble();
+            System.out.println(number+" was entered.");
+            return number;
+        }
+        catch(Exception e){
+            System.out.println("Invalid double number was entered.Please Try again");
+            return inputFloat();
+        }
+    }
 
     public static void closeInputScanner(){
         input.close();

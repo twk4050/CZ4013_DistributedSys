@@ -3,11 +3,11 @@ package client;
 import java.util.Random;
 
 import entity.message;
-
-public class client {
+// TODO: add for more functions
+public class clientmessage {
     private String split = "|";
 
-    public client(){}
+    public clientmessage(){}
 
     public int generateMessageId(){
         Random random = new Random();
