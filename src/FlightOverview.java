@@ -40,35 +40,33 @@ public class FlightOverview {
     // 3. reserveSeat(int flight_id, int num_seat_to_reserve) -> return
     // acknoledgement / return error message(wrong id/noseat)
     /* return List<seatNumber> [101, 102] */
-    // public Boolean reserveSeat(int flightId, int numberOfSeats, int personId){
+    public List<Integer> reserveSeat(int flightId, int numberOfSeats, int personId) {
+        List<Integer> seatsReserved = new ArrayList<>(); // store [seat101, seat102, seat103]
 
-    // Flight f = getFlightById(flightId);
+        Flight f = getFlightById(flightId);
 
-    // if (f == null){
-    // return false;
-    // }
+        if (f == null) {
+            return seatsReserved;
+        }
 
-    // if (f.getSeatsLeft() < numberOfSeats){
-    // return false;
-    // }
+        if (f.getSeatsLeft() < numberOfSeats) {
+            return seatsReserved;
+        }
 
-    // /* handle in Flight.java */
-    // int counter = f.seatMapping.size(); // 0
+        for (int i = 0; i < numberOfSeats; i++) {
+            int seatNumberReserved = f.mapSeats(personId);
+            if (seatNumberReserved == -1) {
+                break; // if seatsleft == 0 -> unable to reserve seats, need to cancel all seats
+            }
+            seatsReserved.add(seatNumberReserved);
+        }
 
-    // for (int i = 0; i < numberOfSeats; i++){
-    // int seatNum = counter + i;
-    // f.seatMapping.put(seatNum, personId);
-    // }
-
-    // int seatsLeft = f.getSeatsLeft() - numberOfSeats);
-    // f.setSeatsLeft(seatsLeft);
-
-    // // f.adjustmonitorList();
-    // // return null
-    // // return Object { status: success, seatsReserved: [101,102,103],
-    // monitorList: [p1,p2,p3] }
-    // return true; // return monitorList = [personid10, ]
-    // }
+        // f.adjustmonitorList();
+        // return null
+        // return Object { status: success, seatsReserved: [101,102,103],
+        // monitorList: [p1,p2,p3] }return true; // return monitorList = [personid10, ]
+        return seatsReserved;
+    }
 
     // 4. monitorFlight(int flight_id, int duration_to_monitor)
     // public void monitorFlight(int flightId, int durationToMonitor) {
@@ -80,11 +78,19 @@ public class FlightOverview {
 
     // }
 
-    // // 5. 1 idempotent request `cancel reserved seat`
-    // public Boolean cancelSeat(int flightId, int personId) {
-    // Flight f = getFlightById(flightId);
+    // 5. 1 idempotent request `cancel reserved seat`
+    public Boolean cancelSeat(int flightId, int personId) {
+        Flight f = getFlightById(flightId);
 
-    // }
+        if (f == null) {
+            return false;
+        }
+
+        f.cancelAllSeatsForPerson(personId);
+
+        return true;
+
+    }
 
     // 6. 1 non idempotent request `find flight below x airfare`
 

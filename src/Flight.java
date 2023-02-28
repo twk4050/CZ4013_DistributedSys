@@ -13,15 +13,22 @@ public class Flight {
     // seat 101 -> id123
     public ArrayList<Integer> monitorList;
 
-    public Flight(int flightId, String source, String dest, int departTime, float airfare, int seatsLeft) {
+    public int totalSeats;
+
+    public Flight(int flightId, String source, String dest, int departTime, float airfare, int totalSeats) {
         this.flightId = flightId;
         this.source = source;
         this.dest = dest;
         this.departTime = departTime;
         this.airfare = airfare;
-        this.seatsLeft = seatsLeft;
+        this.totalSeats = 250;
+        this.seatsLeft = this.totalSeats;
         this.seatMapping = new HashMap<>();
         this.monitorList = new ArrayList<>();
+
+        for (int i = 0; i < this.totalSeats; i++) {
+            this.seatMapping.put(i, -1); // initialize seat0 -> -1 ... seat249 -> -1
+        }
     }
 
     public Integer getId() {
@@ -48,16 +55,37 @@ public class Flight {
         return this.seatsLeft;
     }
 
-    public void setSeatsLeft(int seatsLeft) {
-        this.seatsLeft = seatsLeft;
-    }
-
     public ArrayList<Integer> getMonitorList() {
         return this.monitorList;
     }
 
-    public void cancelSeats(int personId) {
+    public int mapSeats(int personId) {
 
+        for (int seatNumber = 0; seatNumber < this.totalSeats; seatNumber++) {
+            int currentPersonId = this.seatMapping.get(seatNumber);
+
+            // if its empty, assign this seat to the person
+            if (currentPersonId == -1) {
+                this.seatMapping.put(seatNumber, personId);
+                this.seatsLeft -= 1; // change to this.setSeatsLeft() ?
+
+                return seatNumber;
+            }
+        }
+
+        return -1; // if all seats are taken
+    }
+
+    public void cancelAllSeatsForPerson(int personId) {
+        for (int seatNumber = 0; seatNumber < this.totalSeats; seatNumber++) {
+            int currentPersonId = this.seatMapping.get(seatNumber);
+
+            if (currentPersonId == personId) {
+                this.seatMapping.put(seatNumber, -1);
+                this.seatsLeft += 1;
+
+            }
+        }
     }
 
     public void adjustmonitorList() {
