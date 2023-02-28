@@ -33,6 +33,22 @@ public class readuserinput {
             return inputStr();
         }
     }
+    public static String inputPass(){
+        try{
+            char[] pass = System.console().readPassword();
+            String line = new String(pass);
+            while(line == ""){
+                System.out.println("Nothing was entered.");
+                line = input.nextLine().toLowerCase().trim();
+            }
+            System.out.println(line+" was entered.");
+            return line;
+        }
+        catch(Exception e){
+            System.out.println("Invalid String was entered.Please Try again");
+            return inputPass();
+        }
+    }
     public static float inputFloat(){
         try{
             float number = input.nextFloat();

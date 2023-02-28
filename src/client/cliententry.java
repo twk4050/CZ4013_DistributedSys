@@ -9,6 +9,8 @@ public class cliententry {
     public String source= "";
     public String destination="";
     public int seatToReserve= 0 ;
+    public float priceThreshold= 0.00f;
+    public double interval= 0.00;
     private clientmessage client = null;
 
     public cliententry(clientmessage c) {
@@ -31,13 +33,46 @@ public class cliententry {
         return msg;
     }
 
+    // need to account for account details later
     public message reserveSeats(){
         System.out.println("\nPlease enter the flight ID: ");
         flightId = readuserinput.inputInt();
         System.out.println("\nPlease enter the number of seats to be reserved: ");
         seatToReserve = readuserinput.inputInt();
-
-        message msg = client.reserveSeats(flightId,seatToReserve);
+        System.out.println("\nPlease enter Username: ");
+        userName = readuserinput.inputStr();
+        System.out.println("\nPlease enter Password: ");
+        passWord = readuserinput.inputPass();
+        message msg = client.reserveSeats(flightId,seatToReserve,userName,passWord);
+        return msg;
+    }
+    // might remove username and password for this later becos not necessary
+    public message monitorflight(){
+        System.out.println("\nPlease enter the flight ID: ");
+        flightId = readuserinput.inputInt();
+        System.out.println("\nPlease enter Username: ");
+        userName = readuserinput.inputStr();
+        System.out.println("\nPlease enter Password: ");
+        passWord = readuserinput.inputPass();
+        System.out.println("\nPlease enter interval: ");
+        interval = readuserinput.inputDouble();
+        message msg = client.monitorflight(flightId, userName, passWord, interval);
+        return msg;
+    }
+    public message cancelSeat(){
+        System.out.println("\nPlease enter the flight ID: ");
+        flightId = readuserinput.inputInt();
+        System.out.println("\nPlease enter Username: ");
+        userName = readuserinput.inputStr();
+        System.out.println("\nPlease enter Password: ");
+        passWord = readuserinput.inputPass();
+        message msg = client.cancelSeat(flightId, userName, passWord);
+        return msg;
+    }
+    public message getFlightBelowCertainPrice(){
+        System.out.println("\nPlease enter the maximum price threshold: ");
+        priceThreshold = readuserinput.inputFloat();
+        message msg = client.getFlightBelowCertainPrice(priceThreshold);
         return msg;
     }
 }
