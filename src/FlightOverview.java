@@ -79,7 +79,7 @@ public class FlightOverview {
 
         f.addPersonToMonitorList(client);
 
-        return new Response123("client added to monitorList");
+        return new Response123("client added to monitorList", f.getMonitorList());
 
     }
 

@@ -17,6 +17,12 @@ public class Response123 {
         this.monitorList = monitorList;
     }
 
+    // constructor 3
+    public Response123(String status, List<SClient> monitorList) {
+        this.status = status;
+        this.monitorList = monitorList;
+    }
+
     public String getStatus() {
         return this.status;
     }

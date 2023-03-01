@@ -10,6 +10,11 @@ public class SClient {
 
     private long monitorEndTime; //
 
+    public SClient(InetAddress address, int portNo) {
+        this.address = address;
+        this.portNo = portNo;
+    }
+
     public SClient(InetAddress address, int portNo, int durationToMonitor) {
         this.address = address;
         this.portNo = portNo;

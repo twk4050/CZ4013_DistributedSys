@@ -101,7 +101,7 @@ public class Flight {
 
     @Override
     public String toString() {
-        return this.source + " -> " + this.dest + " / airfare: " + this.airfare;
+        return this.source + " -> " + this.dest + " / airfare: " + this.airfare + " / seatsLeft: " + this.seatsLeft;
     }
 
 }
