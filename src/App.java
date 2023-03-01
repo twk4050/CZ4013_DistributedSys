@@ -1,3 +1,4 @@
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,13 +7,27 @@ public class App {
         System.out.println("Hello, World From Main.java");
 
         final int PORT_NO = 1234;
+        FlightOverview fOverview = new FlightOverview(generateSeedData());
 
-        // Server myServer = new Server(PORT_NO);
-        // myServer.startListening();
+        Server myServer = new Server(PORT_NO, fOverview); // rename FlightServer server
+        myServer.testStartListening();
 
-        FlightOverview flightOverview = new FlightOverview(generateSeedData());
+        /** test cases */
+        // FlightOverview fOverview = new FlightOverview(generateSeedData());
 
-        testRequirement6(flightOverview, 500);
+        // InetAddress local = InetAddress.getLocalHost();
+        // int client1_port_no = 5555;
+        // SClient client1 = new SClient(local, client1_port_no, 300);
+
+        // int client2_port_no = 6666;
+        // SClient client2 = new SClient(local, client2_port_no, 60);
+
+        // int flightId = 101;
+        // testRequirement3(fOverview, flightId, 3, client1);
+        // testRequirement4(fOverview, flightId, client2);
+        // testRequirement2(fOverview, flightId);
+        // testRequirement3(fOverview, flightId, 3, client1);
+        // testRequirement6(fOverview, 500);
     }
 
     public static List<Flight> generateSeedData() {
@@ -32,45 +47,54 @@ public class App {
         return flights;
     }
 
-    // 1. getFlight(string source,string dest) -> List of Flights/len=0, return err
-    public static void testRequirement1(FlightOverview flightOverview, String source, String dest) {
+    /**
+     * 1. getFlight(string source,string dest) -> List of Flights/len=0, return err
+     */
+    public static void testRequirement1(FlightOverview fOverview, String source, String dest) {
         System.out.println("testing requirement1 getFlight by source/dest");
-        List<Flight> flights = flightOverview.getFlight(source, dest);
+        List<Flight> flights = fOverview.getFlight(source, dest);
         for (Flight f : flights) {
             System.out.println(f);
         }
     }
 
-    // 2. GetFlightById(int flight_id) -> flight details / error message
-    public static void testRequirement2(FlightOverview flightOverview, int flightId) {
+    /** 2. GetFlightById(int flight_id) -> flight details / error message */
+    public static void testRequirement2(FlightOverview fOverview, int flightId) {
         System.out.println("testing requirement2 getFlightById");
-        Flight f = flightOverview.getFlightById(flightId);
+        Flight f = fOverview.getFlightById(flightId);
         System.out.println(f);
     }
 
-    // 3. reserveSeat(int flight_id, int num_seat_to_reserve) -> return
-    // acknoledgement / return error message(wrong id/noseat)
-    public static void testRequirement3(FlightOverview flightOverview, int flightId, int numberOfSeats,
+    /**
+     * 3. reserveSeat(int flight_id, int num_seat_to_reserve) -> return
+     * acknoledgement / return error message(wrong id/noseat)
+     */
+    public static void testRequirement3(FlightOverview fOverview, int flightId, int numberOfSeats,
             SClient client) {
 
         System.out.println("testing requirement3 reserveSeats");
-        Response123 response123 = flightOverview.reserveSeat(flightId, numberOfSeats, client);
+        Response123 response123 = fOverview.reserveSeat(flightId, numberOfSeats, client);
         System.out.println(response123);
+        System.out.println("seats reserved:" + response123.getSeatsReserved());
+        System.out.println("current monitor list" + response123.getMonitorList());
     }
 
-    // 4. monitorFlight(int flight_id, int duration_to_monitor)
-    public static void testRequirement4(FlightOverview flightOverview, int flightId, SClient client) {
+    /** 4. monitorFlight(int flight_id, int duration_to_monitor) */
+    public static void testRequirement4(FlightOverview fOverview, int flightId, SClient client) {
         System.out.println("testing requirement4 monitorFlights");
-        Response123 response123 = flightOverview.monitorFlight(flightId, client);
+        Response123 response123 = fOverview.monitorFlight(flightId, client);
         System.out.println(response123);
+        System.out.println(response123.getStatus());
+        System.out.println(response123.getMonitorList());
+        System.out.println(response123.getMonitorList().get(0).getPortNo());
     }
 
     // 5. cancelSeats() ?
 
     // 6. getFlightsBelowPrice()
-    public static void testRequirement6(FlightOverview flightOverview, float priceThreshold) {
+    public static void testRequirement6(FlightOverview fOverview, float priceThreshold) {
         System.out.println("testing requirement6 getFlightsBelowCertainPrice");
-        List<Flight> flights = flightOverview.getFlightBelowCertainPrice(priceThreshold);
+        List<Flight> flights = fOverview.getFlightBelowCertainPrice(priceThreshold);
         for (Flight f : flights) {
             System.out.println(f);
         }
