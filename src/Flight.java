@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Flight {
     public int flightId;
@@ -11,7 +12,7 @@ public class Flight {
     public HashMap<Integer, Integer> seatMapping;
     // seat 0 -> id100
     // seat 101 -> id123
-    public ArrayList<Integer> monitorList;
+    public List<SClient> monitorList; // [Person1, Person2] {username, password, ip, port, epoch}
 
     public int totalSeats;
 
@@ -55,10 +56,6 @@ public class Flight {
         return this.seatsLeft;
     }
 
-    public ArrayList<Integer> getMonitorList() {
-        return this.monitorList;
-    }
-
     public int mapSeats(int personId) {
 
         for (int seatNumber = 0; seatNumber < this.totalSeats; seatNumber++) {
@@ -88,15 +85,23 @@ public class Flight {
         }
     }
 
-    public void adjustmonitorList() {
-        // add or remove (list);
+    public List<SClient> getMonitorList() {
+        return this.monitorList;
     }
 
-    // public void addToMonitorList(int personId){
-    // this.monitorList
-    // }
-    // Singapore -> Kuala Lumpur
-    // f.source = Singapore
-    // f.dest = Kuala Lumpur
+    public void addPersonToMonitorList(SClient client) {
+        this.monitorList.add(client);
+    }
+
+    public void removeExpiredFromMonitorList() {
+        // add or remove (list);
+        long currentEpoch = System.currentTimeMillis();
+        this.monitorList.removeIf(p -> currentEpoch > p.getMonitorEndTime());
+    }
+
+    @Override
+    public String toString() {
+        return this.source + " -> " + this.dest + " / airfare: " + this.airfare;
+    }
 
 }

@@ -40,43 +40,48 @@ public class FlightOverview {
     // 3. reserveSeat(int flight_id, int num_seat_to_reserve) -> return
     // acknoledgement / return error message(wrong id/noseat)
     /* return List<seatNumber> [101, 102] */
-    public List<Integer> reserveSeat(int flightId, int numberOfSeats, int personId) {
-        List<Integer> seatsReserved = new ArrayList<>(); // store [seat101, seat102, seat103]
+    public Response123 reserveSeat(int flightId, int numberOfSeats, SClient client) {
 
         Flight f = getFlightById(flightId);
 
         if (f == null) {
-            return seatsReserved;
+            return new Response123("flight with flightid not found");
         }
 
         if (f.getSeatsLeft() < numberOfSeats) {
-            return seatsReserved;
+            return new Response123("seatsLeft < numberOfSeats");
         }
 
+        List<Integer> seatsReserved = new ArrayList<>(); // store [seat101, seat102, seat103]
+
         for (int i = 0; i < numberOfSeats; i++) {
-            int seatNumberReserved = f.mapSeats(personId);
+            int seatNumberReserved = f.mapSeats(client.getId());
             if (seatNumberReserved == -1) {
                 break; // if seatsleft == 0 -> unable to reserve seats, need to cancel all seats
             }
             seatsReserved.add(seatNumberReserved);
         }
 
-        // f.adjustmonitorList();
-        // return null
+        f.removeExpiredFromMonitorList();
+        List<SClient> monitorList = f.getMonitorList();
+
         // return Object { status: success, seatsReserved: [101,102,103],
-        // monitorList: [p1,p2,p3] }return true; // return monitorList = [personid10, ]
-        return seatsReserved;
+        return new Response123("success", seatsReserved, monitorList);
     }
 
     // 4. monitorFlight(int flight_id, int duration_to_monitor)
-    // public void monitorFlight(int flightId, int durationToMonitor) {
-    // Flight f = getFlightById(flightId);
+    public Response123 monitorFlight(int flightId, SClient client) {
+        Flight f = getFlightById(flightId);
 
-    // // TODO: handle error if f is null
-    // // Person class = personId, username, pw, personIP, personPort
-    // f.monitorList.add(personId);
+        if (f == null) {
+            return new Response123("flight with flightid not found");
+        }
 
-    // }
+        f.addPersonToMonitorList(client);
+
+        return new Response123("client added to monitorList");
+
+    }
 
     // 5. 1 idempotent request `cancel reserved seat`
     public Boolean cancelSeat(int flightId, int personId) {
