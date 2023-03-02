@@ -11,6 +11,11 @@ public class marshalling {
         return converted;
     }
 
+    public static String[] decodeMessage(String string){
+        String[] token = string.split("\\|");
+        return token;
+    }
+
     public static String[] decodedString(String string){
         String[] tokens = string.split(":");
         return tokens;
