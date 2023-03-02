@@ -59,7 +59,9 @@ public class Server {
         while (true) {
             this.socket.receive(this.packet); // blocking
 
-            SClient client123 = new SClient(packet.getAddress(), packet.getPort());
+            InetAddress clientAddress = packet.getAddress();
+            int clientPortNo = packet.getPort();
+            SClient client123 = new SClient(clientAddress, clientPortNo);
 
             String msg = Marshalling.convertByteToStringBuilder(this.buffer).toString();
 
@@ -69,23 +71,17 @@ public class Server {
              * // 1. process requirementId first to enter case statement
              * // 2. process again in switch-case to get fn arguments
              */
+
             String[] caseAndArgs = Marshalling.getCaseAndFnArgs(msg);
             String caseId = caseAndArgs[0];
 
-            System.out.println(
-                    "caseid received: " + caseId + " from: " + client123.getAddress() + "/"
-                            + client123.getPortNo());
+            System.out.println("caseid: " + caseId + " from: " + clientAddress + "/" + clientPortNo);
 
             switch (caseId) {
                 case CASE_GET_FLIGHT:
-                    // System.out.println("\nPlease enter the source of the flight: ");
-                    // source = readuserinput.inputStr();
-                    // System.out.println("\nPlease enter the destination of the flight: ");
-                    // destination = readuserinput.inputStr();
-                    // message msg = client.queryFlightId(source, destination);
-                    // return msg;
                     String source = caseAndArgs[1];
                     String dest = caseAndArgs[2];
+
                     Response123 response1 = this.fOverview.getFlight(source, dest);
 
                     this.sendPacket(client123, response1.getStatus());
@@ -96,7 +92,7 @@ public class Server {
 
                     Flight f = this.fOverview.getFlightById(flightId);
                     this.sendPacket(client123, f.toString());
-                    // System.out.println(f);
+
                     break;
                 case CASE_RESERVE_SEAT:
                     int flightIdToReserve = Integer.parseInt(caseAndArgs[1]);
@@ -139,12 +135,6 @@ public class Server {
                     }
                     break;
                 case CASE_MONITOR_FLIGHT:
-                    // System.out.println("\nPlease enter the flight ID: ");
-                    // flightId = readuserinput.inputInt();
-                    // System.out.println("\nPlease enter interval: ");
-                    // interval = readuserinput.inputDouble();
-                    // message msg = client.monitorflight(flightId, userName, passWord, interval);
-                    // return msg;
                     int flightId4 = Integer.parseInt(caseAndArgs[1]);
                     long duration = Long.parseLong(caseAndArgs[2]); // getting input in seconds
 
