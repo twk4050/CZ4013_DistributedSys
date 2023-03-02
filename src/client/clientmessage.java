@@ -78,6 +78,8 @@ public class clientmessage {
         StringBuilder strng = new StringBuilder();
         strng.append(5);
         strng.append(split);
+        strng.append(flightId);
+        strng.append(split);
         strng.append(username);
         strng.append(split);
         strng.append(password);
