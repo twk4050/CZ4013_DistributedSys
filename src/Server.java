@@ -1,5 +1,6 @@
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.List;
 import java.io.IOException;
 import java.net.DatagramPacket;
 
@@ -9,6 +10,7 @@ public class Server {
     DatagramPacket packet;
     byte[] buffer;
     FlightOverview fOverview;
+    SClientOverview clientOverview;
 
     final String CASE_GET_FLIGHT = "1";
     final String CASE_GET_FLIGHT_BY_ID = "2";
@@ -19,12 +21,13 @@ public class Server {
 
     // constructor
     // specifiy specific Exception
-    public Server(int portNo, FlightOverview fOverview) throws Exception {
+    public Server(int portNo, FlightOverview fOverview, SClientOverview clientOverview) throws Exception {
         this.socket = new DatagramSocket(portNo);
         this.buffer = new byte[65535]; // change buffer size
         this.packet = new DatagramPacket(this.buffer, this.buffer.length);
 
         this.fOverview = fOverview;
+        this.clientOverview = clientOverview;
     }
 
     public void startListening() throws Exception {
@@ -75,6 +78,18 @@ public class Server {
 
             switch (caseId) {
                 case CASE_GET_FLIGHT:
+                    // System.out.println("\nPlease enter the source of the flight: ");
+                    // source = readuserinput.inputStr();
+                    // System.out.println("\nPlease enter the destination of the flight: ");
+                    // destination = readuserinput.inputStr();
+                    // message msg = client.queryFlightId(source, destination);
+                    // return msg;
+                    String source = caseAndArgs[1];
+                    String dest = caseAndArgs[2];
+                    Response123 response1 = this.fOverview.getFlight(source, dest);
+
+                    this.sendPacket(client, response1.getStatus());
+
                     break;
                 case CASE_GET_FLIGHT_BY_ID:
                     int flightId = Integer.parseInt(caseAndArgs[1]);
@@ -84,12 +99,63 @@ public class Server {
                     // System.out.println(f);
                     break;
                 case CASE_RESERVE_SEAT:
+                    int flightIdToReserve = Integer.parseInt(caseAndArgs[1]);
+                    int numberOfSeats = Integer.parseInt(caseAndArgs[2]);
+                    String username = caseAndArgs[3];
+                    String password = caseAndArgs[4];
+
+                    client.setUsername(username); // ???
+                    client.setPassword(password); // ???
+                    int userId = clientOverview.checkUserExistAndValidate(username, password);
+                    if (userId != -1) {
+                        Response123 response3 = this.fOverview.reserveSeat(flightIdToReserve, numberOfSeats, client);
+
+                        List<Integer> seatsNum = response3.getSeatsReserved();
+                        String returnMsg = response3.getStatus();
+                        for (int i : seatsNum) {
+                            returnMsg += Integer.toString(i) + "/";
+                        }
+
+                        this.sendPacket(client, returnMsg);
+                    } else {
+                        // send error message
+                        this.sendPacket(client, "user does not exist");
+                    }
                     break;
                 case CASE_MONITOR_FLIGHT:
                     break;
                 case CASE_CANCEL_SEATS:
+                    // System.out.println("\nPlease enter the flight ID: ");
+                    // flightId = readuserinput.inputInt();
+                    // System.out.println("\nPlease enter Username: ");
+                    // userName = readuserinput.inputStr();
+                    // System.out.println("\nPlease enter Password: ");
+                    // passWord = readuserinput.inputPass();
+                    // message msg = client.cancelSeat(flightId, userName, passWord);
+                    // return msg;
+                    int flightIdToCancel = Integer.parseInt(caseAndArgs[1]);
+                    String username5 = caseAndArgs[2];
+                    String password5 = caseAndArgs[3];
+
+                    client.setUsername(username5); // ???
+                    client.setPassword(password5); // ???
+                    int userId5 = clientOverview.checkUserExistAndValidate(username5, password5);
+                    if (userId5 != -1) {
+
+                        Response123 response5 = this.fOverview.cancelSeat(flightIdToCancel, client);
+
+                        this.sendPacket(client, response5.getStatus());
+                    } else {
+                        // send error message
+                        this.sendPacket(client, "user does not exist");
+                    }
+
                     break;
                 case CASE_GET_FLIGHTS_BELOW_PRICE:
+                    Float priceThreshold = Float.parseFloat(caseAndArgs[1]);
+                    Response123 response6 = this.fOverview.getFlightBelowCertainPrice(priceThreshold);
+
+                    this.sendPacket(client, response6.getStatus());
                     break;
                 default:
                     System.out.println("in switch-case default statement: " + caseId);

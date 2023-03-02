@@ -10,20 +10,30 @@ public class FlightOverview {
 
     // 1. getFlight(string source, string dest) -> List of Flights / if length == 0
     // error message
-    public List<Flight> getFlight(String source, String dest) {
+    public Response123 getFlight(String source, String dest) {
 
-        List<Flight> flightList = new ArrayList<Flight>();
+        List<Flight> matchedFlights = new ArrayList<Flight>();
 
         source = source.toLowerCase();
         dest = dest.toLowerCase();
 
         for (Flight f : this.flights) {
             if (f.getSource().equals(source) && f.getDest().equals(dest)) {
-                flightList.add(f);
+                matchedFlights.add(f);
             }
         }
 
-        return flightList;
+        if (matchedFlights.size() == 0) {
+            return new Response123("there are no flights from " + source + " to " + dest);
+        }
+
+        String concatString = "";
+        for (Flight f : matchedFlights) {
+            concatString += f.getId() + "\n";
+        }
+
+        return new Response123(concatString, matchedFlights, "not in use");
+
     }
 
     // 2. GetFlightById(int flight_id) -> flight details / error message
@@ -84,31 +94,41 @@ public class FlightOverview {
     }
 
     // 5. 1 idempotent request `cancel reserved seat`
-    public Boolean cancelSeat(int flightId, int personId) {
+    public Response123 cancelSeat(int flightId, SClient client) {
         Flight f = getFlightById(flightId);
 
         if (f == null) {
-            return false;
+            return new Response123("flight with flightid not found");
         }
 
-        f.cancelAllSeatsForPerson(personId);
+        f.cancelAllSeatsForPerson(client.getId());
 
-        return true;
+        return new Response123("all seats cancelled");
 
     }
 
     // 6. 1 non idempotent request `find flight below x airfare`
 
-    public List<Flight> getFlightBelowCertainPrice(float priceThreshold) {
-        List<Flight> flightList = new ArrayList<Flight>();
+    public Response123 getFlightBelowCertainPrice(float priceThreshold) {
+        List<Flight> matchedFlights = new ArrayList<Flight>();
 
         for (Flight f : this.flights) {
             if (f.getAirfare() < priceThreshold) {
-                flightList.add(f);
+                matchedFlights.add(f);
             }
         }
 
-        return flightList;
+        if (matchedFlights.size() == 0) {
+            return new Response123("there are no flights below $" + priceThreshold);
+        }
+
+        String concatString = "";
+        for (Flight f : matchedFlights) {
+            concatString += f.toString() + "\n";
+        }
+
+        return new Response123(concatString, matchedFlights, "not in use");
+
     }
 
 }

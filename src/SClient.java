@@ -24,7 +24,8 @@ public class SClient {
                                                                            // 1000 to make it milliseconds
     }
 
-    public SClient(String username, String password) {
+    public SClient(int Id, String username, String password) {
+        this.Id = Id;
         this.username = username;
         this.password = password;
     }
@@ -73,10 +74,10 @@ public class SClient {
         this.monitorEndTime = monitorEndTime;
     }
 
-    public boolean validateUser(String usernameInput, String passwordInput) {
+    public int validateUser(String usernameInput, String passwordInput) {
         if (this.username.equals(usernameInput) && this.password.equals(passwordInput)) {
-            return true;
+            return this.Id;
         }
-        return false;
+        return -1;
     }
 }

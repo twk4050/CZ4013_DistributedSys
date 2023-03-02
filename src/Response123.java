@@ -25,10 +25,10 @@ public class Response123 {
     }
 
     // constructor 4
-    // public Response123(String status, List<Flight> flights) {
-    // this.status = status;
-    // this.flights = flights;
-    // }
+    public Response123(String status, List<Flight> flights, String empty) {
+        this.status = status;
+        this.flights = flights;
+    }
 
     public String getStatus() {
         return this.status;
