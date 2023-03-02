@@ -3,10 +3,9 @@ import java.util.List;
 public class Response123 {
     private String status;
     private String message;
-    private List<Integer> seatsReserved;
-    private List<SClient> monitorList;
-    private List<Flight> flights;
+
     private Flight flight;
+    private List<SClient> monitorList;
 
     final String OK_STATUS = "1";
     final String ERROR_STATUS = "-1";
@@ -17,24 +16,19 @@ public class Response123 {
         this.message = message;
     }
 
-    // constructor 2
-    public Response123(String status, List<Integer> seatsReserved, List<SClient> monitorList, Flight flight) {
+    // constructor2
+    public Response123(String status, String message, Flight flight) {
         this.status = status;
-        this.seatsReserved = seatsReserved;
-        this.monitorList = monitorList;
+        this.message = message;
         this.flight = flight;
     }
 
-    // constructor 3
-    public Response123(String status, List<SClient> monitorList) {
+    // constructor3
+    public Response123(String status, String message, List<SClient> monitorList, Flight flight) {
         this.status = status;
+        this.message = message;
         this.monitorList = monitorList;
-    }
-
-    // constructor 4
-    public Response123(String status, List<Flight> flights, String empty) {
-        this.status = status;
-        this.flights = flights;
+        this.flight = flight;
     }
 
     public String getStatus() {
@@ -45,19 +39,11 @@ public class Response123 {
         return this.message;
     }
 
-    public List<Integer> getSeatsReserved() {
-        return this.seatsReserved;
+    public Flight getFlight() {
+        return this.flight;
     }
 
     public List<SClient> getMonitorList() {
         return this.monitorList;
-    }
-
-    public List<Flight> getFlights() {
-        return this.flights;
-    }
-
-    public Flight getFlight() {
-        return this.flight;
     }
 }

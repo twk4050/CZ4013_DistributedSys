@@ -1,7 +1,6 @@
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.List;
-import java.io.IOException;
 import java.net.DatagramPacket;
 
 public class Server {
@@ -30,31 +29,6 @@ public class Server {
         this.clientOverview = clientOverview;
     }
 
-    public void startListening() throws Exception {
-        System.out.println("Server running at port " + socket.getLocalPort());
-
-        while (true) {
-            // waiting to receive packets
-            this.socket.receive(packet); // blocking
-            String messageFromClient = Marshalling.convertByteToStringBuilder(this.buffer).toString();
-
-            // getting client's info
-            int clientPort = packet.getPort();
-            InetAddress clientAddress = packet.getAddress();
-            System.out.println("From Client" + clientAddress + "/" + clientPort + ": " + messageFromClient);
-
-            // crafting response back to client
-            String messageToClient = messageFromClient; // simple echo server for now
-            byte[] rBuffer = messageToClient.getBytes();
-
-            DatagramPacket response = new DatagramPacket(rBuffer, rBuffer.length, clientAddress, clientPort);
-            socket.send(response);
-
-            // refresh at the end
-            refreshPacket();
-        }
-    }
-
     public void testStartListening() throws Exception {
         while (true) {
             this.socket.receive(this.packet); // blocking
@@ -66,7 +40,7 @@ public class Server {
             String msg = Marshalling.convertByteToStringBuilder(this.buffer).toString();
 
             /*
-             * some processing here <requestId:requirement1|flightId>
+             * some processing here <requestId:requirementId|flightId>
              * // 59178:1|arg1|arg2|
              * // 1. process requirementId first to enter case statement
              * // 2. process again in switch-case to get fn arguments
@@ -106,11 +80,15 @@ public class Server {
                     if (userId != -1) {
                         Response123 response3 = this.fOverview.reserveSeat(flightIdToReserve, numberOfSeats, client123);
 
-                        List<Integer> seatsNum = response3.getSeatsReserved();
-                        String returnMsg = response3.getStatus();
-                        for (int i : seatsNum) {
-                            returnMsg += Integer.toString(i) + "/";
+                        // either flightId wrong or unable to reserve seats
+                        if (response3.getStatus() == "-1") {
+                            this.sendPacket(client123, response3.getMessage());
+                            this.refreshPacket();
+                            continue;
                         }
+
+                        // if successful
+                        String returnMsg = response3.getMessage();
 
                         this.sendPacket(client123, returnMsg);
                         this.refreshPacket();
@@ -141,7 +119,7 @@ public class Server {
                     client123.setMonitorEndTimeInMs(duration);
 
                     Response123 response4 = this.fOverview.monitorFlight(flightId4, client123);
-                    this.sendPacket(client123, response4.getStatus());
+                    this.sendPacket(client123, response4.getMessage());
 
                     break;
                 case CASE_CANCEL_SEATS:
@@ -156,7 +134,7 @@ public class Server {
 
                         Response123 response5 = this.fOverview.cancelSeat(flightIdToCancel, client123);
 
-                        String returnMsg = response5.getStatus();
+                        String returnMsg = response5.getMessage();
 
                         this.sendPacket(client123, returnMsg);
                         this.refreshPacket();
@@ -182,9 +160,11 @@ public class Server {
                     break;
                 case CASE_GET_FLIGHTS_BELOW_PRICE:
                     Float priceThreshold = Float.parseFloat(caseAndArgs[1]);
+
                     Response123 response6 = this.fOverview.getFlightBelowCertainPrice(priceThreshold);
 
-                    this.sendPacket(client123, response6.getStatus());
+                    this.sendPacket(client123, response6.getMessage());
+
                     break;
                 default:
                     System.out.println("in switch-case default statement: " + caseId);
