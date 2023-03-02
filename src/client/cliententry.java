@@ -10,7 +10,7 @@ public class cliententry {
     public String destination="";
     public int seatToReserve= 0 ;
     public float priceThreshold= 0.00f;
-    public double interval= 0.00;
+    public int interval= 0;
     private clientmessage client = null;
 
     public cliententry(clientmessage c) {
