@@ -1,6 +1,9 @@
 import entity.Constant;
 
-final class Marshalling {
+public class Marshalling {
+    public Marshalling() {
+    }
+
     public static byte[] stringtobyte(String converting, int rnd) {
         byte[] converted = converting.getBytes(Constant.commonCharset);
         return converted;
