@@ -2,14 +2,19 @@ import java.util.List;
 
 public class Response123 {
     private String status;
+    private String message;
     private List<Integer> seatsReserved;
     private List<SClient> monitorList;
     private List<Flight> flights;
     private Flight flight;
 
+    final String OK_STATUS = "1";
+    final String ERROR_STATUS = "-1";
+
     // constructor1
-    public Response123(String status) {
+    public Response123(String status, String message) {
         this.status = status;
+        this.message = message;
     }
 
     // constructor 2
@@ -34,6 +39,10 @@ public class Response123 {
 
     public String getStatus() {
         return this.status;
+    }
+
+    public String getMessage() {
+        return this.message;
     }
 
     public List<Integer> getSeatsReserved() {

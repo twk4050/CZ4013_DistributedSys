@@ -24,27 +24,41 @@ public class FlightOverview {
         }
 
         if (matchedFlights.size() == 0) {
-            return new Response123("there are no flights from " + source + " to " + dest);
+            String noFlightsMessage = "there are no flights from " + source + " to " + dest;
+            return new Response123("-1", noFlightsMessage);
         }
 
-        String concatString = "";
-        for (Flight f : matchedFlights) {
-            concatString += f.getId() + "\n";
+        String flightsMessage = "The following flights fly from " + source + " to " + dest + " \n";
+        for (int i = 0; i < matchedFlights.size(); i++) {
+            Flight f = matchedFlights.get(i);
+            flightsMessage += "Flight " + f.getId();
+
+            // if last index dun append \n
+            if (i == matchedFlights.size() - 1) {
+                continue;
+            }
+            flightsMessage += "\n";
+
         }
 
-        return new Response123(concatString, matchedFlights, "not in use");
+        return new Response123("1", flightsMessage);
 
     }
 
     // 2. GetFlightById(int flight_id) -> flight details / error message
-    public Flight getFlightById(int flightId) {
+    public Response123 getFlightById(int flightId) {
+
         for (Flight f : this.flights) {
             if (f.getId() == flightId) {
-                return f;
+                String flightDetailsToReturn = f.toString();
+
+                return new Response123("1", flightDetailsToReturn);
             }
         }
 
-        return null;
+        String notFoundMessage = "Flight " + flightId + " not found";
+        return new Response123("-1", notFoundMessage);
+
     }
 
     // 3. reserveSeat(int flight_id, int num_seat_to_reserve) -> return
@@ -126,7 +140,7 @@ public class FlightOverview {
 
         String concatString = "";
         for (Flight f : matchedFlights) {
-            concatString += f.toString() + "\n";
+            concatString += f.toString() + "\n"; // TODO: fix message
         }
 
         return new Response123(concatString, matchedFlights, "not in use");

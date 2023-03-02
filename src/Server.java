@@ -84,14 +84,14 @@ public class Server {
 
                     Response123 response1 = this.fOverview.getFlight(source, dest);
 
-                    this.sendPacket(client123, response1.getStatus());
+                    this.sendPacket(client123, response1.getMessage());
 
                     break;
                 case CASE_GET_FLIGHT_BY_ID:
                     int flightId = Integer.parseInt(caseAndArgs[1]);
 
-                    Flight f = this.fOverview.getFlightById(flightId);
-                    this.sendPacket(client123, f.toString());
+                    Response123 response2 = this.fOverview.getFlightById(flightId);
+                    this.sendPacket(client123, response2.getMessage());
 
                     break;
                 case CASE_RESERVE_SEAT:
