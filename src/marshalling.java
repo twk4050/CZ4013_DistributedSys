@@ -1,17 +1,6 @@
-import entity.Constant;
 
 public class Marshalling {
     public Marshalling() {
-    }
-
-    public static byte[] stringtobyte(String converting, int rnd) {
-        byte[] converted = converting.getBytes(Constant.commonCharset);
-        return converted;
-    }
-
-    public static String bytetoString(byte[] converting) {
-        String converted = new String(converting, Constant.commonCharset);
-        return converted;
     }
 
     // A utility method to convert the byte array data into a string representation.
@@ -27,21 +16,17 @@ public class Marshalling {
         return ret;
     }
 
-    public static int msglength(byte[] bytes) {
-        String str = bytetoString(bytes);
-        return str.length();
+    // <requestId:requirementId|flightId>
+    public static String getRequestId(String s) {
+        String[] tokens = s.split(":");
+        return tokens[0];
     }
 
     public static String getRequirementId(String s) {
-        String[] splitColon = s.split(":");
-        String[] caseAndFunctionArgs = splitColon[1].split("\\|");
+        String[] tokens = s.split(":");
+        String[] caseAndFnArgs = tokens[1].split("\\|");
 
-        return caseAndFunctionArgs[0];
-    }
-
-    public static String getRequestId(String string) {
-        String[] tokens = string.split(":");
-        return tokens[0];
+        return caseAndFnArgs[0];
     }
 
     public static String[] getCaseAndFnArgs(String string) {
