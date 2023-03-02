@@ -60,7 +60,7 @@ public class clientmessage {
         msg.setMessageContent(request);
         return msg;
     }
-    public message monitorflight(int flightId, String username, String password, double interval){
+    public message monitorflight(int flightId, String username, String password, int interval){
         message msg = createRequestMessage();
         StringBuilder strng = new StringBuilder();
         strng.append(4);
