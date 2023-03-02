@@ -26,7 +26,7 @@ public class main {
         this.socket.send(packet);
     }
 
-    public void receivePacket() throws IOException {
+    public String receivePacket() throws IOException {
         byte[] buffer = new byte[65535];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
@@ -34,9 +34,10 @@ public class main {
 
         InetAddress serverAddress = packet.getAddress();
         int serverPort = packet.getPort();
-
         String messageFromClient = convertByteToStringBuilder(buffer).toString();
-        System.out.println("From Server" + serverAddress + "/" + serverPort + ": " + messageFromClient);
+        return messageFromClient;
+        // String messageFromClient = convertByteToStringBuilder(buffer).toString();
+        // System.out.println("From Server" + serverAddress + "/" + serverPort + ": " + messageFromClient);
     }
     public static StringBuilder convertByteToStringBuilder(byte[] a) {
         if (a == null)
@@ -84,37 +85,56 @@ public class main {
                     m = e.queryFlightId();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
-                    c1.receivePacket();
+                    String response1 = c1.receivePacket();
+                    System.out.println(response1);
                     break;
                 case 2:
                     m = e.queryFlightInfo();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
                     c1.receivePacket();
+                    String response2 = c1.receivePacket();
+                    System.out.println(response2);
                     break;
                 case 3:
                     m = e.reserveSeats();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
                     c1.receivePacket();
+                    String response3 = c1.receivePacket();
+                    System.out.println(response3);
                     break;
                 case 4:
                     m = e.monitorflight();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
-                    c1.receivePacket();
+                    String responsefromServer = c1.receivePacket();
+                    System.out.println(responsefromServer);
+                    if (responsefromServer.contains("added")) {
+                        while (true) {
+                            String monitorResponse = c1.receivePacket();
+                            System.out.println(monitorResponse);
+                            if (monitorResponse.contains("removed")) {
+                                break;
+                            }
+                        }
+                    }
                     break;
                 case 5:
                     m = e.cancelSeat();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
                     c1.receivePacket();
+                    String response5 = c1.receivePacket();
+                    System.out.println(response5);
                     break;
                 case 6:
                     m = e.getFlightBelowCertainPrice();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
                     c1.receivePacket();
+                    String response6 = c1.receivePacket();
+                    System.out.println(response6);
                     break;
             }
             
