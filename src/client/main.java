@@ -59,8 +59,8 @@ public class main {
         "Distributed Flight Information System\n" +
         "----------------------------------------\n" +
         "Select an option:\n" +
-        "1. Check Flight ID\n" +
-        "2. Check Flight Information\n" +
+        "1. Find Flight ID by Source and Destination\n" +
+        "2. Find Flight Information By ID\n" +
         "3. Reserve a Flight\n" +
         "4. Monitor Seat Availability\n" +
         "5. Cancel Reservation\n" +
@@ -92,7 +92,6 @@ public class main {
                     m = e.queryFlightInfo();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
-                    c1.receivePacket();
                     String response2 = c1.receivePacket();
                     System.out.println(response2);
                     break;
@@ -100,7 +99,6 @@ public class main {
                     m = e.reserveSeats();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
-                    c1.receivePacket();
                     String response3 = c1.receivePacket();
                     System.out.println(response3);
                     break;
@@ -124,7 +122,6 @@ public class main {
                     m = e.cancelSeat();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
-                    c1.receivePacket();
                     String response5 = c1.receivePacket();
                     System.out.println(response5);
                     break;
@@ -132,7 +129,6 @@ public class main {
                     m = e.getFlightBelowCertainPrice();
                     msg = m.messageToString();
                     c1.sendPacket(msg);
-                    c1.receivePacket();
                     String response6 = c1.receivePacket();
                     System.out.println(response6);
                     break;
