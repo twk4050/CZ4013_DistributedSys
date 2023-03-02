@@ -67,10 +67,6 @@ public class clientmessage {
         strng.append(split);
         strng.append(flightId);
         strng.append(split);
-        strng.append(username);
-        strng.append(split);
-        strng.append(password);
-        strng.append(split);
         strng.append(interval);
         strng.append(split);
         String request = strng.toString();

@@ -50,10 +50,6 @@ public class cliententry {
     public message monitorflight(){
         System.out.println("\nPlease enter the flight ID: ");
         flightId = readuserinput.inputInt();
-        System.out.println("\nPlease enter Username: ");
-        userName = readuserinput.inputStr();
-        System.out.println("\nPlease enter Password: ");
-        passWord = readuserinput.inputPass();
         System.out.println("\nPlease enter interval: ");
         interval = readuserinput.inputDouble();
         message msg = client.monitorflight(flightId, userName, passWord, interval);
