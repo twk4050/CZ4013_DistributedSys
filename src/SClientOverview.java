@@ -8,7 +8,6 @@ public class SClientOverview {
         this.clients = clients;
     }
 
-    // TODO: split function into user exist then validate
     public int checkUserExistAndValidate(String usernameInput, String passwordInput) {
         for (SClient client : this.clients) {
             int userId = client.validateUser(usernameInput, passwordInput);
