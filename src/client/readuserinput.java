@@ -41,7 +41,6 @@ public class readuserinput {
                 System.out.println("Nothing was entered.");
                 line = input.nextLine().toLowerCase().trim();
             }
-            System.out.println(line+" was entered.");
             return line;
         }
         catch(Exception e){
