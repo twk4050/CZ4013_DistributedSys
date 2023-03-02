@@ -50,8 +50,8 @@ public class cliententry {
     public message monitorflight(){
         System.out.println("\nPlease enter the flight ID: ");
         flightId = readuserinput.inputInt();
-        System.out.println("\nPlease enter interval: ");
-        interval = readuserinput.inputDouble();
+        System.out.println("\nPlease enter interval in seconds: ");
+        interval = readuserinput.inputInt();
         message msg = client.monitorflight(flightId, userName, passWord, interval);
         return msg;
     }
