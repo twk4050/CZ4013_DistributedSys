@@ -92,6 +92,7 @@ public class clientmessage {
         strng.append(6);
         strng.append(split);
         strng.append(priceThreshold);
+        strng.append("f");
         strng.append(split);
         String request = strng.toString();
         msg.setMessageContent(request);
