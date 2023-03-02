@@ -4,6 +4,7 @@ public class Response123 {
     private String status;
     private List<Integer> seatsReserved;
     private List<SClient> monitorList;
+    private List<Flight> flights;
 
     // constructor1
     public Response123(String status) {
@@ -23,6 +24,12 @@ public class Response123 {
         this.monitorList = monitorList;
     }
 
+    // constructor 4
+    // public Response123(String status, List<Flight> flights) {
+    // this.status = status;
+    // this.flights = flights;
+    // }
+
     public String getStatus() {
         return this.status;
     }
@@ -33,5 +40,9 @@ public class Response123 {
 
     public List<SClient> getMonitorList() {
         return this.monitorList;
+    }
+
+    public List<Flight> getFlights() {
+        return this.flights;
     }
 }

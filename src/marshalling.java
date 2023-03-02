@@ -1,6 +1,6 @@
 import entity.Constant;
 
-public class Marshalling {
+final class Marshalling {
     public static byte[] stringtobyte(String converting, int rnd) {
         byte[] converted = converting.getBytes(Constant.commonCharset);
         return converted;
@@ -9,6 +9,19 @@ public class Marshalling {
     public static String bytetoString(byte[] converting) {
         String converted = new String(converting, Constant.commonCharset);
         return converted;
+    }
+
+    // A utility method to convert the byte array data into a string representation.
+    public static StringBuilder convertByteToStringBuilder(byte[] a) {
+        if (a == null)
+            return null;
+        StringBuilder ret = new StringBuilder();
+        int i = 0;
+        while (a[i] != 0) {
+            ret.append((char) a[i]);
+            i++;
+        }
+        return ret;
     }
 
     public static int msglength(byte[] bytes) {

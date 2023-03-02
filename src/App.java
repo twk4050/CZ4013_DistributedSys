@@ -9,7 +9,7 @@ public class App {
         final int PORT_NO = 1234;
         FlightOverview fOverview = new FlightOverview(generateSeedData());
 
-        Server myServer = new Server(PORT_NO, fOverview); // rename FlightServer server
+        Server myServer = new Server(PORT_NO, fOverview); // rename FlightServer
         myServer.testStartListening();
 
         /** test cases */
@@ -28,6 +28,19 @@ public class App {
         // testRequirement2(fOverview, flightId);
         // testRequirement3(fOverview, flightId, 3, client1);
         // testRequirement6(fOverview, 500);
+
+        // String s = "59178:1|101|102";
+        // String[] list123 = s.split(":");
+        // System.out.println(list123);
+
+        // String[] args = s.split("|");
+        // for (String x : list123) {
+        // System.out.println(x);
+        // }
+        // for (String x : args) {
+        // System.out.println(x);
+        // }
+
     }
 
     public static List<Flight> generateSeedData() {
