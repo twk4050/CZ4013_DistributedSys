@@ -63,7 +63,7 @@ public class clientmessage {
     public message monitorflight(int flightId, String username, String password, double interval){
         message msg = createRequestMessage();
         StringBuilder strng = new StringBuilder();
-        strng.append(5);
+        strng.append(4);
         strng.append(split);
         strng.append(flightId);
         strng.append(split);
