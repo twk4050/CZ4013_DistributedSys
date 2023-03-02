@@ -10,8 +10,8 @@ public class App {
         FlightOverview fOverview = new FlightOverview(generateFlightsData());
         SClientOverview clientOverview = new SClientOverview(generateClientsData());
 
-        Server myServer = new Server(PORT_NO, fOverview, clientOverview); // rename FlightServer
-        myServer.testStartListening();
+        Server flightServer = new Server(PORT_NO, fOverview, clientOverview); // rename FlightServer
+        flightServer.startListening();
 
         /** test cases */
         // FlightOverview fOverview = new FlightOverview(generateSeedData());

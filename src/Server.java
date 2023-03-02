@@ -29,7 +29,7 @@ public class Server {
         this.clientOverview = clientOverview;
     }
 
-    public void testStartListening() throws Exception {
+    public void startListening() throws Exception {
         while (true) {
             this.socket.receive(this.packet); // blocking
 
