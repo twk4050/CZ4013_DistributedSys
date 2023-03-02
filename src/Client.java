@@ -23,7 +23,7 @@ public class Client {
         this.socket.send(packet);
     }
 
-    public void receivePacket() throws IOException {
+    public String receivePacket() throws IOException {
         byte[] buffer = new byte[65535];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
@@ -33,7 +33,9 @@ public class Client {
         int serverPort = packet.getPort();
 
         String messageFromClient = convertByteToStringBuilder(buffer).toString();
-        System.out.println("From Server" + serverAddress + "/" + serverPort + ": " + messageFromClient);
+        return messageFromClient;
+        // System.out.println("From Server" + serverAddress + "/" + serverPort + ": " +
+        // messageFromClient);
     }
 
     public static void main(String args[]) throws IOException, Exception {
@@ -45,7 +47,21 @@ public class Client {
             String input = sc.nextLine();
             c1.sendPacket(input);
 
-            c1.receivePacket();
+            String responsefromServer = c1.receivePacket();
+            System.out.println(responsefromServer);
+            if (responsefromServer.contains("added")) {
+                while (true) {
+                    String monitorResponse = c1.receivePacket();
+                    System.out.println(monitorResponse);
+                    if (monitorResponse.contains("removed")) {
+                        break;
+                    }
+                }
+            }
+            // while (true) {
+            // c1.receivePacket();
+            // }
+
         }
     }
 

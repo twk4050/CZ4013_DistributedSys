@@ -72,11 +72,11 @@ public class FlightOverview {
             seatsReserved.add(seatNumberReserved);
         }
 
-        f.removeExpiredFromMonitorList();
+        // f.removeExpiredFromMonitorList();
         List<SClient> monitorList = f.getMonitorList();
 
         // return Object { status: success, seatsReserved: [101,102,103],
-        return new Response123("success", seatsReserved, monitorList);
+        return new Response123("success", seatsReserved, monitorList, f);
     }
 
     // 4. monitorFlight(int flight_id, int duration_to_monitor)
@@ -101,10 +101,12 @@ public class FlightOverview {
             return new Response123("flight with flightid not found");
         }
 
+        List<Integer> seatsCancelled = new ArrayList<>(); // TODO: add in seats cancelled
         f.cancelAllSeatsForPerson(client.getId());
 
-        return new Response123("all seats cancelled");
+        List<SClient> monitorList = f.getMonitorList();
 
+        return new Response123("success", seatsCancelled, monitorList, f);
     }
 
     // 6. 1 non idempotent request `find flight below x airfare`

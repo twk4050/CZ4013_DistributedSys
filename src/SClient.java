@@ -20,8 +20,8 @@ public class SClient {
         this.portNo = portNo;
 
         long currentTimestamp = System.currentTimeMillis();
-        this.monitorEndTime = currentTimestamp + durationToMonitor * 1000; // TODO: client inputs 100second, multiply //
-                                                                           // 1000 to make it milliseconds
+        this.monitorEndTime = currentTimestamp + durationToMonitor * 1000; // TODO: client inputs 100second, multiply
+
     }
 
     public SClient(int Id, String username, String password) {
@@ -70,8 +70,9 @@ public class SClient {
         return this.monitorEndTime;
     }
 
-    public void setMonitorEndTime(long monitorEndTime) {
-        this.monitorEndTime = monitorEndTime;
+    public void setMonitorEndTimeInMs(long durationInSeconds) {
+        long currentTimestamp = System.currentTimeMillis();
+        this.monitorEndTime = currentTimestamp + durationInSeconds * 1000;
     }
 
     public int validateUser(String usernameInput, String passwordInput) {

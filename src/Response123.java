@@ -5,6 +5,7 @@ public class Response123 {
     private List<Integer> seatsReserved;
     private List<SClient> monitorList;
     private List<Flight> flights;
+    private Flight flight;
 
     // constructor1
     public Response123(String status) {
@@ -12,10 +13,11 @@ public class Response123 {
     }
 
     // constructor 2
-    public Response123(String status, List<Integer> seatsReserved, List<SClient> monitorList) {
+    public Response123(String status, List<Integer> seatsReserved, List<SClient> monitorList, Flight flight) {
         this.status = status;
         this.seatsReserved = seatsReserved;
         this.monitorList = monitorList;
+        this.flight = flight;
     }
 
     // constructor 3
@@ -44,5 +46,9 @@ public class Response123 {
 
     public List<Flight> getFlights() {
         return this.flights;
+    }
+
+    public Flight getFlight() {
+        return this.flight;
     }
 }

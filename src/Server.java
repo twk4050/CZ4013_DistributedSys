@@ -59,7 +59,7 @@ public class Server {
         while (true) {
             this.socket.receive(this.packet); // blocking
 
-            SClient client = new SClient(packet.getAddress(), packet.getPort());
+            SClient client123 = new SClient(packet.getAddress(), packet.getPort());
 
             String msg = Marshalling.convertByteToStringBuilder(this.buffer).toString();
 
@@ -73,8 +73,8 @@ public class Server {
             String caseId = caseAndArgs[0];
 
             System.out.println(
-                    "caseid received: " + caseId + " from: " + client.getAddress() + "/"
-                            + client.getPortNo());
+                    "caseid received: " + caseId + " from: " + client123.getAddress() + "/"
+                            + client123.getPortNo());
 
             switch (caseId) {
                 case CASE_GET_FLIGHT:
@@ -88,14 +88,14 @@ public class Server {
                     String dest = caseAndArgs[2];
                     Response123 response1 = this.fOverview.getFlight(source, dest);
 
-                    this.sendPacket(client, response1.getStatus());
+                    this.sendPacket(client123, response1.getStatus());
 
                     break;
                 case CASE_GET_FLIGHT_BY_ID:
                     int flightId = Integer.parseInt(caseAndArgs[1]);
 
                     Flight f = this.fOverview.getFlightById(flightId);
-                    this.sendPacket(client, f.toString());
+                    this.sendPacket(client123, f.toString());
                     // System.out.println(f);
                     break;
                 case CASE_RESERVE_SEAT:
@@ -104,11 +104,11 @@ public class Server {
                     String username = caseAndArgs[3];
                     String password = caseAndArgs[4];
 
-                    client.setUsername(username); // ???
-                    client.setPassword(password); // ???
+                    client123.setUsername(username); // ???
+                    client123.setPassword(password); // ???
                     int userId = clientOverview.checkUserExistAndValidate(username, password);
                     if (userId != -1) {
-                        Response123 response3 = this.fOverview.reserveSeat(flightIdToReserve, numberOfSeats, client);
+                        Response123 response3 = this.fOverview.reserveSeat(flightIdToReserve, numberOfSeats, client123);
 
                         List<Integer> seatsNum = response3.getSeatsReserved();
                         String returnMsg = response3.getStatus();
@@ -116,38 +116,77 @@ public class Server {
                             returnMsg += Integer.toString(i) + "/";
                         }
 
-                        this.sendPacket(client, returnMsg);
+                        this.sendPacket(client123, returnMsg);
+                        this.refreshPacket();
+
+                        List<SClient> monitorList = response3.getMonitorList();
+                        for (SClient c : monitorList) {
+                            long currentTimestamp = System.currentTimeMillis();
+
+                            if (c.getMonitorEndTime() < currentTimestamp) {
+                                this.sendPacket(c, "Client removed from monitorList");
+                                this.refreshPacket();
+                            } else {
+                                this.sendPacket(c, returnMsg);
+                                this.refreshPacket();
+                            }
+                        }
+                        response3.getFlight().removeExpiredFromMonitorList();
+
                     } else {
                         // send error message
-                        this.sendPacket(client, "user does not exist");
+                        this.sendPacket(client123, "user does not exist");
                     }
                     break;
                 case CASE_MONITOR_FLIGHT:
-                    break;
-                case CASE_CANCEL_SEATS:
                     // System.out.println("\nPlease enter the flight ID: ");
                     // flightId = readuserinput.inputInt();
-                    // System.out.println("\nPlease enter Username: ");
-                    // userName = readuserinput.inputStr();
-                    // System.out.println("\nPlease enter Password: ");
-                    // passWord = readuserinput.inputPass();
-                    // message msg = client.cancelSeat(flightId, userName, passWord);
+                    // System.out.println("\nPlease enter interval: ");
+                    // interval = readuserinput.inputDouble();
+                    // message msg = client.monitorflight(flightId, userName, passWord, interval);
                     // return msg;
+                    int flightId4 = Integer.parseInt(caseAndArgs[1]);
+                    long duration = Long.parseLong(caseAndArgs[2]); // getting input in seconds
+
+                    client123.setMonitorEndTimeInMs(duration);
+
+                    Response123 response4 = this.fOverview.monitorFlight(flightId4, client123);
+                    this.sendPacket(client123, response4.getStatus());
+
+                    break;
+                case CASE_CANCEL_SEATS:
                     int flightIdToCancel = Integer.parseInt(caseAndArgs[1]);
                     String username5 = caseAndArgs[2];
                     String password5 = caseAndArgs[3];
 
-                    client.setUsername(username5); // ???
-                    client.setPassword(password5); // ???
+                    client123.setUsername(username5); // ???
+                    client123.setPassword(password5); // ???
                     int userId5 = clientOverview.checkUserExistAndValidate(username5, password5);
                     if (userId5 != -1) {
 
-                        Response123 response5 = this.fOverview.cancelSeat(flightIdToCancel, client);
+                        Response123 response5 = this.fOverview.cancelSeat(flightIdToCancel, client123);
 
-                        this.sendPacket(client, response5.getStatus());
+                        String returnMsg = response5.getStatus();
+
+                        this.sendPacket(client123, returnMsg);
+                        this.refreshPacket();
+
+                        List<SClient> monitorList = response5.getMonitorList();
+                        for (SClient c : monitorList) {
+                            long currentTimestamp = System.currentTimeMillis();
+
+                            if (c.getMonitorEndTime() < currentTimestamp) {
+                                this.sendPacket(c, "Client removed from monitorList");
+                                this.refreshPacket();
+                            } else {
+                                this.sendPacket(c, returnMsg);
+                                this.refreshPacket();
+                            }
+                        }
+                        response5.getFlight().removeExpiredFromMonitorList();
                     } else {
                         // send error message
-                        this.sendPacket(client, "user does not exist");
+                        this.sendPacket(client123, "user does not exist");
                     }
 
                     break;
@@ -155,11 +194,11 @@ public class Server {
                     Float priceThreshold = Float.parseFloat(caseAndArgs[1]);
                     Response123 response6 = this.fOverview.getFlightBelowCertainPrice(priceThreshold);
 
-                    this.sendPacket(client, response6.getStatus());
+                    this.sendPacket(client123, response6.getStatus());
                     break;
                 default:
                     System.out.println("in switch-case default statement: " + caseId);
-                    this.sendPacket(client, "echo Server: " + caseId);
+                    this.sendPacket(client123, "echo Server: " + caseId);
                     break;
             }
             this.refreshPacket();
