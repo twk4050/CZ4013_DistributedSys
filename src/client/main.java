@@ -88,14 +88,41 @@ public class main {
                 case 1:
                     m = e.queryFlightId();
                     msg = m.messageToString();
-                    String response1 = null;
+                    String response1 = "";
 
                     while (count < retry) {
                         try{
                             c1.socket.setSoTimeout(timeout);
                             c1.sendPacket(msg);
                             response1 = c1.receivePacket();
-                            if (!response1.equals(null)){
+                            if (response1 != ""){
+                                count = 0;
+                                break;
+                            }
+                        }
+                        catch (Exception e1) {
+                            System.out.println("Timeout, retrying...");
+                        }
+
+                        count++;
+                    }
+                    if (response1 == ""){
+                        System.out.println("Server is not responding, please try again later.");
+                    }
+                    else{
+                        System.out.println(response1);
+                    }
+                    break;
+                case 2:
+                    m = e.queryFlightInfo();
+                    msg = m.messageToString();
+                    String response2 = "";
+                    while (count < retry) {
+                        try{
+                            c1.socket.setSoTimeout(timeout);
+                            c1.sendPacket(msg);
+                            response2 = c1.receivePacket();
+                            if (response2 != ""){
                                 count = 0;
                                 break;
                             }
@@ -106,56 +133,127 @@ public class main {
                         
                         count++;
                     }
-                    if (response1.equals(null)){
+                    if (response2 == ""){
                         System.out.println("Server is not responding, please try again later.");
                     }
                     else{
-                        System.out.println(response1);
+                        System.out.println(response2);
                     }
-                    break;
-                case 2:
-                    m = e.queryFlightInfo();
-                    msg = m.messageToString();
-                    c1.sendPacket(msg);
-                    String response2 = c1.receivePacket();
-                    System.out.println(response2);
-                    break;
+                    break;    
                 case 3:
                     m = e.reserveSeats();
                     msg = m.messageToString();
-                    c1.sendPacket(msg);
-                    String response3 = c1.receivePacket();
-                    System.out.println(response3);
+                    String response3 = "";
+                    while (count < retry) {
+                        try{
+                            c1.socket.setSoTimeout(timeout);
+                            c1.sendPacket(msg);
+                            response3 = c1.receivePacket();
+                            if (response3 != ""){
+                                count = 0;
+                                break;
+                            }
+                        }
+                        catch (Exception e1) {
+                            System.out.println("Timeout, retrying...");
+                        }
+                        
+                        count++;
+                    }
+                    if (response3 == ""){
+                        System.out.println("Server is not responding, please try again later.");
+                    }
+                    else{
+                        System.out.println(response3);
+                    }
                     break;
                 case 4:
                     m = e.monitorflight();
                     msg = m.messageToString();
-                    c1.sendPacket(msg);
-                    String responsefromServer = c1.receivePacket();
-                    System.out.println(responsefromServer);
-                    if (responsefromServer.contains("added")) {
-                        while (true) {
-                            String monitorResponse = c1.receivePacket();
-                            System.out.println(monitorResponse);
-                            if (monitorResponse.contains("removed")) {
+                    String responsefromServer = "";
+                    while (count <retry){
+                        try{
+                            c1.sendPacket(msg);
+                            responsefromServer = c1.receivePacket();
+                            if (responsefromServer.contains("added")){
+                                count = 0;
                                 break;
                             }
                         }
+                        catch(Exception e1){
+                            System.out.println("Timeout, retrying...");
+                        }
                     }
+                    if (responsefromServer == ""){
+                        System.out.println("Server is not responding, please try again later.");
+                    }
+                    else{
+                        System.out.println(responsefromServer);
+                        if (responsefromServer.contains("added")) {
+                            while (true) {
+                                String monitorResponse = c1.receivePacket();
+                                System.out.println(monitorResponse);
+                                if (monitorResponse.contains("removed")) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
                     break;
                 case 5:
                     m = e.cancelSeat();
                     msg = m.messageToString();
-                    c1.sendPacket(msg);
-                    String response5 = c1.receivePacket();
-                    System.out.println(response5);
+                    String response5= "";
+                    while (count < retry) {
+                        try{
+                            c1.socket.setSoTimeout(timeout);
+                            c1.sendPacket(msg);
+                            response5 = c1.receivePacket();
+                            if (response5 != ""){
+                                count = 0;
+                                break;
+                            }
+                        }
+                        catch (Exception e1) {
+                            System.out.println("Timeout, retrying...");
+                        }
+                        
+                        count++;
+                    }
+                    if (response5 == ""){
+                        System.out.println("Server is not responding, please try again later.");
+                    }
+                    else{
+                        System.out.println(response5);
+                    }
                     break;
                 case 6:
                     m = e.getFlightBelowCertainPrice();
                     msg = m.messageToString();
-                    c1.sendPacket(msg);
-                    String response6 = c1.receivePacket();
-                    System.out.println(response6);
+                    String response6= "";
+                    while (count < retry) {
+                        try{
+                            c1.socket.setSoTimeout(timeout);
+                            c1.sendPacket(msg);
+                            response6 = c1.receivePacket();
+                            if (response6 != ""){
+                                count = 0;
+                                break;
+                            }
+                        }
+                        catch (Exception e1) {
+                            System.out.println("Timeout, retrying...");
+                        }
+                        
+                        count++;
+                    }
+                    if (response6 == ""){
+                        System.out.println("Server is not responding, please try again later.");
+                    }
+                    else{
+                        System.out.println(response6);
+                    }
                     break;
             }
             
