@@ -173,6 +173,7 @@ public class main {
                     String responsefromServer = "";
                     while (count <retry){
                         try{
+                            c1.socket.setSoTimeout(timeout);
                             c1.sendPacket(msg);
                             responsefromServer = c1.receivePacket();
                             if (responsefromServer.contains("added")){
@@ -191,11 +192,13 @@ public class main {
                         System.out.println(responsefromServer);
                         if (responsefromServer.contains("added")) {
                             while (true) {
+                                c1.socket.setSoTimeout(0);
                                 String monitorResponse = c1.receivePacket();
                                 System.out.println(monitorResponse);
                                 if (monitorResponse.contains("removed")) {
                                     break;
                                 }
+
                             }
                         }
                     }

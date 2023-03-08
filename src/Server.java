@@ -169,18 +169,10 @@ public class Server {
                                     long currentTimestamp = System.currentTimeMillis();
 
                                     if (c.getMonitorEndTime() < currentTimestamp) {
-                                        if (AT_LEAST_ONCE) {
-                                            atLeastOnceSendPacket(c, "Client removed from monitorList");
-                                        } else {
-                                            this.sendPacket(c, "Client removed from monitorList");
-                                        }
+                                        this.sendPacket(c, "Client removed from monitorList");
                                         this.refreshPacket();
                                     } else {
-                                        if (AT_LEAST_ONCE) {
-                                            atLeastOnceSendPacket(c, response3Message);
-                                        } else {
-                                            this.sendPacket(c, response3Message);
-                                        }
+                                        this.sendPacket(c, response3Message);
                                         this.refreshPacket();
                                     }
                                 }
@@ -235,18 +227,10 @@ public class Server {
                                     long currentTimestamp = System.currentTimeMillis();
 
                                     if (c.getMonitorEndTime() < currentTimestamp) {
-                                        if (AT_LEAST_ONCE) {
-                                            atLeastOnceSendPacket(c, "Client removed from monitorList");
-                                        } else {
-                                            this.sendPacket(c, "Client removed from monitorList");
-                                        }
+                                        this.sendPacket(c, "Client removed from monitorList");
                                         this.refreshPacket();
                                     } else {
-                                        if (AT_LEAST_ONCE) {
-                                            atLeastOnceSendPacket(c, response5Message);
-                                        } else {
-                                            this.sendPacket(c, response5Message);
-                                        }
+                                        this.sendPacket(c, response5Message);
                                         this.refreshPacket();
                                     }
                                 }
