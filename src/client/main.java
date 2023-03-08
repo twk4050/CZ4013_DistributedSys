@@ -79,14 +79,39 @@ public class main {
             String result = null;
             String[] results = null;
             String msg = null;
+
+            int count = 0;
+            int retry = 5;
+            int timeout = 3000;
             
             switch(userinput){
                 case 1:
                     m = e.queryFlightId();
                     msg = m.messageToString();
-                    c1.sendPacket(msg);
-                    String response1 = c1.receivePacket();
-                    System.out.println(response1);
+                    String response1 = null;
+
+                    while (count < retry) {
+                        try{
+                            c1.socket.setSoTimeout(timeout);
+                            c1.sendPacket(msg);
+                            response1 = c1.receivePacket();
+                            if (!response1.equals(null)){
+                                count = 0;
+                                break;
+                            }
+                        }
+                        catch (Exception e1) {
+                            System.out.println("Timeout, retrying...");
+                        }
+                        
+                        count++;
+                    }
+                    if (response1.equals(null)){
+                        System.out.println("Server is not responding, please try again later.");
+                    }
+                    else{
+                        System.out.println(response1);
+                    }
                     break;
                 case 2:
                     m = e.queryFlightInfo();

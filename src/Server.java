@@ -20,11 +20,11 @@ public class Server {
     final String CASE_CANCEL_SEATS = "5";
     final String CASE_GET_FLIGHTS_BELOW_PRICE = "6";
 
-    boolean AT_MOST_ONCE = true;
+    boolean AT_MOST_ONCE = false;
     boolean AT_LEAST_ONCE = true;
 
     final Integer refuseRate = 5;
-    final Integer failSendRate = 5;
+    final Integer failSendRate = 8;
 
     // constructor
     // specifiy specific Exception
